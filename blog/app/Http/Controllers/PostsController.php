@@ -9,7 +9,7 @@ class PostsController extends Controller
 {
     public function __construct()
     {
-        // This middlerware allow users to only see the index and show methods
+        // Allowing users to only access index , show pages
         $this->middleware('auth',['except' => ['index' ,'show','blog']]);
     }
     /**
@@ -19,6 +19,7 @@ class PostsController extends Controller
      */
     public function index()
     {
+        // Get all the post from the DB order by desc
         return view('blog.index')->with('posts' ,Post::orderBy('updated_at' ,'DESC')->get());
     }
 
@@ -40,17 +41,19 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+        // Input validation
         $request->validate([
             'title' => 'required',
             'description' => 'required',
              'image' => 'required|mimes:jpg,png,jpeg|max:5040'
         ]);
+
         // Uplode image
         $newImage = uniqid()."-".$request->slug.'.'.$request->image->extension();
 
         $request->image->move(public_path('images') , $newImage);
-        // dd(auth()->user()->id);
-        // creaet a new blog
+       
+       // Create a post afetr validation
         Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -59,6 +62,7 @@ class PostsController extends Controller
             "image" => $newImage
         ]);
 
+        // if the post created redirect to blog page with a message
         return redirect('/blog')->with('message' , 'Your post created successfully');
 
     }
@@ -72,6 +76,7 @@ class PostsController extends Controller
      */
     public function show($slug)
     {
+        //Show a specifc post based on his slug
         return view('blog.show')->with('post' , Post::where('slug',$slug)->first());
     }
 
@@ -95,21 +100,16 @@ class PostsController extends Controller
      */
     public function update(Request $request, $slug)
     {
+        //Input validation
         $request->validate([
             'title' => 'required',
             'description' => 'required',
         ]);
 
-        // Uplode image
-        // dd($request->image->extension());
-        // $newImage = uniqid()."-".$request->title.'.'.$request->image->extension();
-
-        // $request->image->move(public_path('images') , $newImage);
-
+        //Update after vlidation
         Post::where('slug',$slug)->update([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-
         ]);
 
         return redirect('/blog')->with('message',"your post has been updated!");

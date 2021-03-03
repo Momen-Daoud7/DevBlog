@@ -6,16 +6,17 @@
 <section class="blogs py-5">
 	<div class="container">
 		<h2 class="py-3 text-center">Blogs</h2>
+		<!-- check if the user login or not -->
 		@if(auth::check())
 			<a href="blog/create" class="btn btn-primary rounded-2 py-2 m-auto">Create a blog</a>
 		@endif
+		<!-- check if there a message from the controller -->
 		@if(session()->has('message'))
 			<p class="btn btn-success ml-5">{{session()->get('message')}}</p>
 		@endif
 		<div class="row">
 			@foreach($posts as $post)
 			<div class="col-md-8 d-flex align-items-center m-auto w-100">
-			
 				<img src="{{asset('images/'.$post->image)}}" width="300px" height="300px" class="mb-5 mr-auto">
 				<div>
 				<h2 class="blog-title">{{$post->title}}</h2>
@@ -35,9 +36,7 @@
 				@endif
 			</div>
 		</div>
-
-				@endforeach
-		</div>
+		@endforeach
 	</div>
 </section>
 @endsection
