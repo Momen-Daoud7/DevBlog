@@ -3,7 +3,7 @@
 @section('content')
 <div class="create-blog">
 	<div class="container">
-		<h2 class="text-center font-weight-bold py-3">Create a blog</h2>
+		<h2 class="text-center font-weight-bold py-3">Edit a blog</h2>
 		<form action="/blog/{{$post->slug}}" enctype="mulutipart/form-data" method="POST">
 			@csrf
 			@method('PUT')
